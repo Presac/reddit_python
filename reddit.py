@@ -8,20 +8,18 @@ with open('config.yaml', 'r') as stream:
     except yaml.YAMLError as exc:
         print(exc)
 
-for data in config:
-    print('key: {}, value: {}'.format(data, config[data]))
-
-
 reddit = praw.Reddit(client_id=config['client_id'],
                      client_secret=config['client_secret'],
                      user_agent=config['user_agent'])
 
 subreddit = reddit.subreddit('FreeGameFindings')
 for submission in subreddit.stream.submissions():
-    print('Title: {}, url: {}, created: {}'.
+    time_string = time.strftime("%d-%m-%Y, %H:%M:%S",
+                                time.localtime(int(submission.created)))
+    print('{}, URL: {}, CREATED: {}'.
           format(submission.title,
                  submission.url,
-                 time.ctime(int(submission.created))))
+                 time_string))
 
 
 # new_python = subreddit.new(limit=3)
