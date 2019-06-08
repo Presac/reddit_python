@@ -1,5 +1,3 @@
-import praw
-import time
 import yaml
 from reddit import CustomReddit
 
@@ -30,7 +28,7 @@ def init_sites_list():
 def init_redditor_list():
     """Returns a list of redditors from a yaml file."""
     redditors = []
-    with open('sites.yaml', 'r') as stream:
+    with open('redditors.yaml', 'r') as stream:
         try:
             redditors = yaml.safe_load(stream)
         except yaml.YAMLError as exc:
@@ -39,28 +37,17 @@ def init_redditor_list():
     return redditors
 
 
-def message_to_redditor(reddit, name, message):
-    reddit.redditor(name).message('', message)
-    pass
-
-
 def main():
-    # Open config file with passwords for the reddit client
+    # Initialize information from files
     config = init_config()
-
     sites = init_sites_list()
-
-    # redditors = init_redditor_list()
+    redditors = init_redditor_list()
 
     # Create the reddit client
-    reddit = CustomReddit(config, 'FreeGameFindings')
+    reddit = CustomReddit(config)
 
     # Start the stream for checking new posts
-    # reddit.start_stream(subreddit, sites, redditors)
-
-    posts = reddit.find_top_x_posts(20, sites)
-    for post in posts:
-        CustomReddit.print_post(post)
+    reddit.start_stream('FreeGameFindings', sites, redditors)
 
 
 if __name__ == '__main__':
