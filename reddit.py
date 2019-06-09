@@ -40,6 +40,8 @@ class CustomReddit(object):
         """Starts a stream for a subreddit
         Any new post will be printed."""
         # posts = []
+        for redditor in redditors:
+            self.message_to_redditor(redditor, 'App for new post has started.')
         print('Started streaming from ' + sub)
         for post in self.reddit.subreddit(sub).stream \
                 .submissions(skip_existing=True):
