@@ -1,4 +1,5 @@
 import yaml
+import os
 from reddit import CustomReddit
 
 
@@ -38,10 +39,22 @@ def init_redditor_list():
 
 
 def main():
+    place = os.environ.get('instance', None)
+
     # Initialize information from files
-    config = init_config()
     sites = init_sites_list()
-    redditors = init_redditor_list()
+    if place is 'IS_GLITCH':
+        print('IS_GLITCH')
+        config = {'client_id': os.environ.get('client_id', None),
+                  'client_secret': os.environ.get('client_secret', None),
+                  'user_agent': os.environ.get('user_agent', None),
+                  'username': os.environ.get('username', None),
+                  'password': os.environ.get('password', None)}
+        redditors = [os.environ.get('redittors', None)]
+    else:
+        print('IS_DEV')
+        config = init_config()
+        redditors = init_redditor_list()
 
     # Create the reddit client
     reddit = CustomReddit(config)
