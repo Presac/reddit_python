@@ -1,6 +1,5 @@
 certifi==2019.3.9
 chardet==3.0.4
-gunicorn==19.9.0
 idna==2.8
 praw==6.2.0
 prawcore==1.0.1
