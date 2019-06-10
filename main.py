@@ -31,14 +31,14 @@ def main():
 
     # Initialize information from files
     sites = FI.init_sites_list()
-    if place is 'IS_GLITCH':
+    if place == 'IS_GLITCH':
         config = {'client_id': os.environ.get('client_id', None),
                   'client_secret': os.environ.get('client_secret', None),
                   'user_agent': os.environ.get('user_agent', None),
                   'username': os.environ.get('username', None),
                   'password': os.environ.get('password', None)}
-        redditors = os.environ.get('redittors', None)
-        app.secret = os.environ.get('secret')
+        redditors = [os.environ.get('redditors', None)]
+        app.secret = os.environ.get('secret', None)
     else:
         config = FI.init_config()
         redditors = FI.init_redditor_list()
