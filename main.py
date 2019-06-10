@@ -7,7 +7,7 @@ from threading import Timer, Thread
 from flask import Flask
 
 app = Flask(__name__)
-sub_name = 'testingground4bots'
+sub_name = 'FreeGameFindings'
 domain = 'http://{}.glitch.me/'.format(os.environ.get('PROJECT_DOMAIN'), None)
 
 
