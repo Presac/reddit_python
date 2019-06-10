@@ -39,9 +39,9 @@ class CustomReddit(object):
     def start_stream(self, sub, sites, redditors):
         """Starts a stream for a subreddit
         Any new post will be printed."""
-        # posts = []
         for redditor in redditors:
-            self.message_to_redditor(redditor, 'App for new post has started.')
+            self.message_to_redditor(redditor,
+                                     'The app for new posts has started.')
         print('Started streaming from ' + sub)
         for post in self.reddit.subreddit(sub).stream \
                 .submissions(skip_existing=True):
@@ -53,7 +53,7 @@ class CustomReddit(object):
                             "created": post.created}
                     self.print_post(post)
                     for redditor in redditors:
-                        self.message_to_redditor(redditor, post['permalink'])
+                        self.message_to_redditor(redditor, post.permalink)
 
     def message_to_redditor(self, name, message):
         self.reddit.redditor(name).message('New Post', message)
