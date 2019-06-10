@@ -47,12 +47,13 @@ class CustomReddit(object):
                 .submissions(skip_existing=True):
             for site in sites:
                 if site in post.url.lower():
-                    post = {"title": post.title,
-                            "url": post.url,
-                            "permalink": post.permalink,
-                            "created": post.created}
-                    self.print_post(post)
+                    post_info = {"title": post.title,
+                                 "url": post.url,
+                                 "permalink": post.permalink,
+                                 "created": post.created}
+                    self.print_post(post_info)
                     for redditor in redditors:
+                        print(redditor)
                         self.message_to_redditor(redditor, post.permalink)
 
     def message_to_redditor(self, name, message):
