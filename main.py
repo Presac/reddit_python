@@ -1,50 +1,18 @@
-import yaml
 import os
-from reddit import CustomReddit
-from flask import Flask
 import time
 import requests
+from reddit import CustomReddit
+from file_import import file_importing as FI
 from threading import Timer, Thread
+from flask import Flask
+
 app = Flask(__name__)
-
-
-def init_config():
-    """Returns data from config.yaml"""
-    with open('data/config.yaml', 'r') as stream:
-        try:
-            config = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-
-    return config
-
-
-def init_sites_list():
-    """Returns a list of sites from a yaml file."""
-    sites = []
-    with open('data/sites.yaml', 'r') as stream:
-        try:
-            sites = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-
-    return sites
-
-
-def init_redditor_list():
-    """Returns a list of redditors from a yaml file."""
-    redditors = []
-    with open('data/redditors.yaml', 'r') as stream:
-        try:
-            redditors = yaml.safe_load(stream)
-        except yaml.YAMLError as exc:
-            print(exc)
-
-    return redditors
+sub_name = 'testingground4bots'
+domain = 'http://{}.glitch.me/'.format(os.environ.get('PROJECT_DOMAIN'), None)
 
 
 def keep_alive():
-    requests.get('http://localhost:5000')
+    requests.get(domain)
     s = Timer(240.0, keep_alive)
     s.daemon = True
     s.start()
@@ -62,36 +30,37 @@ def main():
     place = os.environ.get('instance', None)
 
     # Initialize information from files
-    sites = init_sites_list()
+    sites = FI.init_sites_list()
     if place is 'IS_GLITCH':
         config = {'client_id': os.environ.get('client_id', None),
                   'client_secret': os.environ.get('client_secret', None),
                   'user_agent': os.environ.get('user_agent', None),
                   'username': os.environ.get('username', None),
                   'password': os.environ.get('password', None)}
-        redditors = [os.environ.get('redittors', None)]
+        redditors = os.environ.get('redittors', None)
         app.secret = os.environ.get('secret')
     else:
-        config = init_config()
-        redditors = init_redditor_list()
+        config = FI.init_config()
+        redditors = FI.init_redditor_list()
 
     # Create the reddit client
     reddit = CustomReddit(config)
 
-    # Start the stream for checking new posts
-    stream_thread = Thread(target=reddit.start_stream,
-                           args=('FreeGameFindings',
-                                 sites,
-                                 redditors),
-                           daemon=True)
-    stream_thread.start()
+    if place is 'IS_GLITCH':
+        # Start the stream for checking new posts
+        stream_thread = Thread(target=reddit.start_stream,
+                               args=(sub_name, sites, redditors),
+                               daemon=True)
+        stream_thread.start()
 
-    # Needed to keep the app alive on glitch.com
-    keep_alive_timer = Timer(240.0, keep_alive)
-    keep_alive_timer.daemon = True
-    keep_alive_timer.start()
+        # Needed to keep the app alive on glitch.com
+        keep_alive_timer = Timer(240.0, keep_alive)
+        keep_alive_timer.daemon = True
+        keep_alive_timer.start()
 
-    app.run()
+        app.run()
+    else:
+        reddit.start_stream(sub_name, sites, redditors)
 
 
 if __name__ == '__main__':
