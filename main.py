@@ -1,6 +1,11 @@
 import yaml
 import os
 from reddit import CustomReddit
+from flask import Flask
+import time
+import requests
+from threading import Timer, Thread
+app = Flask(__name__)
 
 
 def init_config():
@@ -38,6 +43,21 @@ def init_redditor_list():
     return redditors
 
 
+def keep_alive():
+    requests.get('http://localhost:5000')
+    s = Timer(240.0, keep_alive)
+    s.daemon = True
+    s.start()
+
+
+@app.route('/', methods=['GET'])
+def hello():
+    print("{} UTC {:+.0f} Ping Received"
+          .format(time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()),
+                  time.localtime().tm_gmtoff / 3600))
+    return 'All is good'
+
+
 def main():
     place = os.environ.get('instance', None)
 
@@ -50,6 +70,7 @@ def main():
                   'username': os.environ.get('username', None),
                   'password': os.environ.get('password', None)}
         redditors = [os.environ.get('redittors', None)]
+        app.secret = os.environ.get('secret')
     else:
         config = init_config()
         redditors = init_redditor_list()
@@ -58,7 +79,19 @@ def main():
     reddit = CustomReddit(config)
 
     # Start the stream for checking new posts
-    reddit.start_stream('FreeGameFindings', sites, redditors)
+    stream_thread = Thread(target=reddit.start_stream,
+                           args=('FreeGameFindings',
+                                 sites,
+                                 redditors),
+                           daemon=True)
+    stream_thread.start()
+
+    # Needed to keep the app alive on glitch.com
+    keep_alive_timer = Timer(240.0, keep_alive)
+    keep_alive_timer.daemon = True
+    keep_alive_timer.start()
+
+    app.run()
 
 
 if __name__ == '__main__':
