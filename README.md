@@ -18,4 +18,4 @@ Example files for config and redditors is listed in [data](data). This is needed
 
 Guide to [PRAW](https://praw.readthedocs.io/en/latest/getting_started/quick_start.html#authorized-reddit-instances) - the Python Reddit API Wrapper
 
-Currently running on [glitch.com](https://glitch.com/edit/#!/presac-reddit-python?)
+Currently running on [repl.it](https://repl.it/@Presac/redditpython)

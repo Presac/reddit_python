@@ -106,3 +106,4 @@ venv.bak/
 # custom
 config.yaml
 redditors.yaml
+poetry.lock
