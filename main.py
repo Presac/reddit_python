@@ -19,9 +19,9 @@ def main():
                   'username': os.environ.get('username', None),
                   'password': os.environ.get('password', None)}
         redditors = [os.environ.get('redditors', None)]
-    '''else:
+    else:
         config = FI.init_config()
-        redditors = FI.init_redditor_list()'''
+        redditors = FI.init_redditor_list()
 
     # Create the reddit client
     reddit = CustomReddit(config)
