@@ -1,7 +1,7 @@
 import yaml
 
-
 class file_importing(object):
+    @staticmethod
     def init_config():
         """Returns data from config.yaml"""
         with open('data/config.yaml', 'r') as stream:
@@ -12,6 +12,7 @@ class file_importing(object):
 
         return config
 
+    @staticmethod
     def init_sites_list():
         """Returns a list of sites from a yaml file."""
         sites = []
@@ -23,6 +24,7 @@ class file_importing(object):
 
         return sites
 
+    @staticmethod
     def init_redditor_list():
         """Returns a list of redditors from a yaml file."""
         redditors = []
