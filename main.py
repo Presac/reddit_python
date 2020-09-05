@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import requests
 from reddit import CustomReddit
@@ -26,16 +28,16 @@ def main():
     # Create the reddit client
     reddit = CustomReddit(config)
 
-    if place == 'IS_REPL':
-        # Start the stream for checking new posts
-        stream_thread = Thread(target=reddit.start_stream,
-                               args=(sub_name, sites, redditors),
-                               daemon=True)
-        stream_thread.start()
+    #if place == 'IS_REPL':
+    # Start the stream for checking new posts
+    stream_thread = Thread(target=reddit.start_stream,
+                            args=(sub_name, sites, redditors),
+                            daemon=True)
+    stream_thread.start()
 
-        keep_alive()
-    else:
-        reddit.start_stream(sub_name, sites, redditors)
+    keep_alive()
+    #else:
+    #    reddit.start_stream(sub_name, sites, redditors)
 
 
 if __name__ == '__main__':
