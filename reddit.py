@@ -43,8 +43,8 @@ class CustomReddit(object):
             self.message_to_redditor(redditor,
                                      'The app for new posts has started.')'''
         print('Started streaming from ' + sub)
-        for post in self.reddit.subreddit(sub).stream \
-                .submissions(skip_existing=True):
+        for post in self.reddit.subreddit(sub).stream.submissions():
+            # if any(site in post.url.lower() for site in sites):
             for site in sites:
                 if site in post.url.lower():
                     post_info = {"title": post.title,
