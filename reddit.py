@@ -17,7 +17,7 @@ class CustomReddit(object):
         for post in new_python:
             if not post.stickied:
                 posts.append({"title": post.title,
-                              "utl": post.url,
+                              "url": post.url,
                               "permalink": post.permalink,
                               "created": post.created})
         return posts
@@ -39,9 +39,9 @@ class CustomReddit(object):
     def start_stream(self, sub, sites, redditors):
         """Starts a stream for a subreddit
         Any new post will be printed."""
-        '''for redditor in redditors:
-            self.message_to_redditor(redditor,
-                                     'The app for new posts has started.')'''
+        for redditor in redditors:
+            self.message_to_redditor(redditor, 'Python_Reddit Bot',
+                                     'The app for new posts has started.')
         print('Started streaming from ' + sub)
         for post in self.reddit.subreddit(sub).stream \
                 .submissions(skip_existing=True):
