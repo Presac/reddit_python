@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
 
 import os
-import requests
+import logging
 from reddit import CustomReddit
 from threading import Thread
 from keep_alive import keep_alive
 from file_import import file_importing as FI
 
 sub_name = 'FreeGameFindings'
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler('reddit.log'),
+        logging.StreamHandler()
+    ])
 
 def main():
     place = os.environ.get('instance', None)
@@ -28,16 +36,12 @@ def main():
     # Create the reddit client
     reddit = CustomReddit(config)
 
-    #if place == 'IS_REPL':
-    # Start the stream for checking new posts
     stream_thread = Thread(target=reddit.start_stream,
                             args=(sub_name, sites, redditors),
                             daemon=True)
     stream_thread.start()
 
     keep_alive()
-    #else:
-    #    reddit.start_stream(sub_name, sites, redditors)
 
 
 if __name__ == '__main__':
