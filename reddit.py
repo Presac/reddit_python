@@ -42,20 +42,18 @@ class CustomReddit(object):
         Any new post will be printed."""
         logging.info(f'Starting stream from {sub}')
 
-        for post in self.reddit.subreddit(sub).stream \
-                .submissions(skip_existing=True):
-            for site in sites:
-                if site in post.url.lower():
-                    post_info = {"title": post.title,
-                                 "url": post.url,
-                                 "permalink": post.permalink,
-                                 "created": post.created}
-                    
-                    logging.info(f'New post: {post_info.permalink}')
-                    logging.info(f'Sending info to: {redditors}')
-                    
-                    for redditor in redditors:
-                        self.message_to_redditor(redditor, site, post.permalink)
+        sub_stream = self.reddit.subreddit(sub).stream \
+                .submissions(skip_existing=True)
+
+        for post in sub_stream:
+            if not any(site in post.url.lower() for site in sites):
+                continue
+            
+            logging.info(f'New game: {post.permalink}')
+            logging.info(f'Sending info to: {redditors}')
+            
+            for redditor in redditors:
+                self.message_to_redditor(redditor, 'New Game', post.permalink)
 
     def message_to_redditor(self, name, subject, message):
         self.reddit.redditor(name).message(subject, message)
