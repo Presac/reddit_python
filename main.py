@@ -37,7 +37,7 @@ def main():
     reddit = CustomReddit(config)
 
     stream_thread = Thread(target=reddit.start_stream,
-                            args=(sub_name, sites, redditors),
+                            args=(sub_name, redditors, sites),
                             daemon=True)
     stream_thread.start()
 
