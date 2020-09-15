@@ -74,14 +74,17 @@ class CustomReddit(object):
                 .submissions(skip_existing=True)
 
         for post in sub_stream:
-            if not any(site in post.url.lower() for site in sites):
-                continue
+            if sites != None:
+                if not any(site in post.url.lower() for site in sites):
+                    continue
             
             logging.info(f'New game: {post.permalink}')
             logging.info(f'Sending info to: {redditors}')
+
+            message = f'[{post.title}]({post.permalink})'
             
             for redditor in redditors:
-                self.send_message(redditor, 'New Game', post.permalink)
+                self.send_message(redditor, 'New Game', message)
 
     def send_message(self, name: str, subject: str, message: str):
         """Sends a message to a redditor
