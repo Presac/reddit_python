@@ -2,6 +2,7 @@ import praw
 import time
 import logging
 from typing import List
+from prawcore.exceptions import PrawcoreException
 
 
 class CustomReddit(object):
@@ -70,21 +71,30 @@ class CustomReddit(object):
         """        
         logging.info(f'Starting stream from {sub}')
 
-        sub_stream = self.reddit.subreddit(sub).stream \
-                .submissions(skip_existing=True)
+        running = True
+        while running:
+            try:
+                sub_stream = self.reddit.subreddit(sub).stream \
+                        .submissions(skip_existing=True)
 
-        for post in sub_stream:
-            if sites != None:
-                if not any(site in post.url.lower() for site in sites):
-                    continue
-            
-            logging.info(f'New game: {post.permalink}')
-            logging.info(f'Sending info to: {redditors}')
+                for post in sub_stream:
+                    if sites != None:
+                        if not any(site in post.url.lower() for site in sites):
+                            continue
+                    
+                    logging.info(f'New game: {post.permalink}')
+                    logging.info(f'Sending info to: {redditors}')
 
-            message = f'[{post.title}]({post.permalink})'
-            
-            for redditor in redditors:
-                self.send_message(redditor, 'New Game', message)
+                    message = f'[{post.title}]({post.permalink})'
+                    
+                    for redditor in redditors:
+                        self.send_message(redditor, 'New Game', message)
+            except KeyboardInterrupt:
+                logging.info('Termination received')
+                running = False
+            except PrawcoreException:
+                logging.exception('run loop')
+                time.sleep(10)
 
     def send_message(self, name: str, subject: str, message: str):
         """Sends a message to a redditor
