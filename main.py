@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import logging
-from reddit import CustomReddit
-from file_import import FileImporting as FI
+from modules.reddit import CustomReddit
+from modules.file_import import FileImporting as FI
 
 sub_name = 'FreeGameFindings'
 
