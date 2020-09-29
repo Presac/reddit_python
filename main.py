@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import os
 import logging
 from reddit import CustomReddit
 from file_import import file_importing as FI
