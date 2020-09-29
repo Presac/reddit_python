@@ -1,10 +1,19 @@
 #!/usr/bin/env python3
 
 import os
+import logging
 from reddit import CustomReddit
 from file_import import file_importing as FI
 
 sub_name = 'FreeGameFindings'
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[
+        logging.FileHandler('reddit.log'),
+        logging.StreamHandler()
+    ])
 
 def main():
     place = os.environ.get('instance', None)
