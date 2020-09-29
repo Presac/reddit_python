@@ -1,4 +1,3 @@
-import time
 import logging
 from flask import Flask
 from flask import request
@@ -11,12 +10,19 @@ app = Flask(__name__)
 def home():
     logging.info(f'Ping received from {request.remote_addr}')
     
-    status = subprocess.check_output(["systemctl", "is-active", "reddit_python.service"], universal_newlines=True).split('\n')
-    return f'The reddit_python bot is {status}'
+    status = []
+    for command in ["ActiveState", "SubState"]:
+        status.append(subprocess.check_output(["systemctl", "show", "-p", command, "--value", "reddit_python.service"], universal_newlines=True).split('\n')[0])
+
+    return f'The reddit_python bot is {status[0]} and {status[1]}'
 
 def run():
-  app.run(host='0.0.0.0',port=1717)
+    app.run(host='0.0.0.0', port=59246)
 
 def keep_alive():
     t = Thread(target=run)
     t.start()
+
+
+if __name__ == '__main__':
+    run()
