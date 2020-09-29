@@ -1,6 +1,6 @@
 import yaml
 
-class file_importing(object):
+class FileImporting(object):
     @staticmethod
     def init_config():
         """Returns data from config.yaml"""
@@ -9,6 +9,7 @@ class file_importing(object):
                 config = yaml.safe_load(stream)
             except yaml.YAMLError as exc:
                 print(exc)
+                config = ''
 
         return config
 

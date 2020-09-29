@@ -2,7 +2,7 @@
 
 import logging
 from reddit import CustomReddit
-from file_import import file_importing as FI
+from file_import import FileImporting as FI
 
 sub_name = 'FreeGameFindings'
 
